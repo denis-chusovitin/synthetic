@@ -29,6 +29,8 @@ void startFunctionTest() { printf("%s\n", "test"); }
 #define FIRST_RULE 0
 #define SECOND_RULE 1
 
+std::string global_string_with_program;
+
 GlobalDataStorage& generate_functions_data =
     GlobalDataStorage::Instance();  // Возможно не понадобится
 
@@ -52,7 +54,6 @@ bool isNodeWithClosure(
   }
   return false;
 };
-
 void printProgramCodeFromNode(NodeStruct* _node) {
   RequestNodeInformation _request;
   _request._name.assign(_node->_name);
@@ -60,10 +61,8 @@ void printProgramCodeFromNode(NodeStruct* _node) {
   AnswerNodeInformation* _answer;
   _answer = sendRequestToDll(&_request);
   // Проверяем узел с замыканием или нет можно и внутри ДЛЛ проверять
-  // if (isNodeWithClosure(_node))
   if (_answer
           ->is_closure_operator) {  // Зашли в узел, создали структуру с именем
-
     // Получили ответ, теперь с ним работаем
     // Смотри:
     if (_answer->is_stop) {
@@ -109,12 +108,18 @@ void printProgramCodeFromVariable(VariableStruct* _variable) {
       temp_str = temp_str.substr(0, temp_str.find("'"));
       if (temp_str.compare(";") == 0 || temp_str.compare("{") == 0 ||
           temp_str.compare("}") == 0) {
-        printf("%s \n", temp_str.c_str());
+        // printf("%s \n", temp_str.c_str());
+        global_string_with_program.append(temp_str);
+        global_string_with_program.append("\n");
       } else {
-        printf("%s ", temp_str.c_str());
+        // printf("%s ", temp_str.c_str());
+        global_string_with_program.append(temp_str);
+        global_string_with_program.append(" ");
       }
     } else {
-      printf("%s ", temp_str.c_str());
+      // printf("%s ", temp_str.c_str());
+      global_string_with_program.append(temp_str);
+      global_string_with_program.append(" ");
     }
   }
 };
@@ -123,7 +128,7 @@ void clearAllDynamicData() {
   // delete counter_of_block_code_invokes;
 }
 
-void generateProgramCode() {
+void generateProgramCode(std::string file_path) {
   srand(time(NULL));
   // Будет программа
   // которая генерирует нам карту или вектор из объектов SettingsStruct
@@ -132,4 +137,18 @@ void generateProgramCode() {
   printProgramCodeFromNode(generate_functions_data.node_struct_vector[0]);
 
   clearAllDynamicData();
+
+  if (file_path.compare("") == 0) {
+    printf("%s\n", global_string_with_program.c_str());
+  } else {
+    FILE* pointer_to_file;
+    pointer_to_file = fopen(file_path.c_str(), "w+");
+    if (pointer_to_file != NULL) {
+      // Точно печать в файл
+      fputs(global_string_with_program.c_str(), pointer_to_file);
+    } else {
+      printf("%s\n", global_string_with_program.c_str());
+    }
+    fclose(pointer_to_file);
+  }
 }
