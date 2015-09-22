@@ -1,18 +1,28 @@
-﻿struct NodeStruct;
+struct NodeStruct;
 struct RuleStruct;
 struct VariableStruct;
 
 struct NodeStruct {
+  int i;
   std::string _name;            // По сути это lable
   std::string _node_uniq_name;  // Уникальное имя
   std::string _lable_data;
   std::vector<RuleStruct*> _rule;
-  void printLable() {
-    printf("%s [label=\"%s\"];\n", _node_uniq_name.c_str(), _name.c_str());
+  std::string printLable() {
+    std::string temp_str("");
+    temp_str.append(_node_uniq_name);
+    temp_str.append("[label=\"");
+    temp_str.append(_name);
+    // temp_str.append("\"];\n");
+    temp_str.append("\" shape=box,color=deeppink,style=filled ];\n");
+    return temp_str;
+    // printf("%s [label=\"%s\"];\n", _node_uniq_name.c_str(), _name.c_str());
   };
-  explicit NodeStruct(std::string name) : _name(name){};
-  explicit NodeStruct(std::string node_uniq_name, std::string lable_data)
-      : _node_uniq_name(node_uniq_name), _lable_data(lable_data) {
+  NodeStruct(){};
+  NodeStruct(std::string name) { _name = name; };
+  NodeStruct(std::string node_uniq_name, std::string lable_data) {
+    _node_uniq_name = node_uniq_name;
+    _lable_data = lable_data;
     //
     _name = _lable_data.substr(_lable_data.find("\"") + 1);
     _name = _name.substr(0, _name.find("\""));
@@ -23,10 +33,17 @@ struct RuleStruct {
   std::string _name;
   std::string _rule_uniq_name;
   std::vector<VariableStruct*> _variable;
-  explicit RuleStruct(std::string name) : _name(name){};
-  void printLable() {
-    printf("%s [label=\"%s\" shape=box,color=aquamarine,style=filled ];\n",
-           _rule_uniq_name.c_str(), _name.c_str());
+  RuleStruct(){};
+  RuleStruct(std::string name) { _name = name; };
+  std::string printLable() {
+    std::string temp_str("");
+    temp_str.append(_rule_uniq_name);
+    temp_str.append("[label=\"");
+    temp_str.append(_name);
+    temp_str.append("\" shape=box,color=aquamarine,style=filled ];\n");
+    return temp_str;
+    // printf("%s [label=\"%s\" shape=box,color=aquamarine,style=filled ];\n",
+    // _rule_uniq_name.c_str(), _name.c_str());
   };
 };
 
@@ -37,13 +54,21 @@ struct VariableStruct {
   std::string _node_name;  // Имя Элемента NodeStruct на который будем ссылаться
   NodeStruct* _node;
 
-  explicit VariableStruct(std::string lable_data) : _lable_data(lable_data) {
+  VariableStruct(std::string lable_data) {
+    _lable_data = lable_data;
     _node = NULL;
     _variable_uniq_name = _lable_data.substr(0, _lable_data.find("\n") - 2);
     _name = _lable_data.substr(_lable_data.find("\"") + 1);
     _name = _name.substr(0, _name.find("\""));
   };
-  void printLable() {
+  std::string printLable() {
+    std::string temp_str("");
+    temp_str.append(_variable_uniq_name);
+    temp_str.append("[label=\"");
+    temp_str.append(_name);
+    temp_str.append(
+        "\" shape=polygon,sides=5,color=lightblue,style=filled ];\n");
+    return temp_str;
     printf(
         "%s [label=\"%s\" shape=polygon,sides=5,color=lightblue,style=filled "
         "];\n",
