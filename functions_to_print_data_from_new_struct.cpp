@@ -40,6 +40,16 @@ GlobalDataStorage& print_functions_data = GlobalDataStorage::Instance();
       "} }\" style=filled gradientangle=90 "               \
       "fillcolor=\"lightsteelblue1;0.5:green\"];\n");
 
+bool isItToken(VariableStruct* _variable,
+               std::vector<std::string>* massive_of_tokens) {
+  for (int i = 0; i < massive_of_tokens->size(); ++i) {
+    if (_variable->_name.compare((*massive_of_tokens)[i]) == 0) {
+      return true;
+    }
+  }
+  return false;
+};
+
 std::string returnIntToString(int number) {
   std::string str;
   char buf[10];
@@ -90,7 +100,6 @@ void printNodeData(NodeStruct* _node,
   if (_node->_rule.size() != 0) {
     for (auto i = _node->_rule.begin(); i != _node->_rule.end(); ++i) {
       if ((*i) != NULL) {
-        // printf("%s -> ",_node->_node_uniq_name.c_str() );
         global_string_with_graph.append(_node->_node_uniq_name.c_str());
         global_string_with_graph.append(" -> ");
         printRuleData((*i), massive_of_tokens);
@@ -101,18 +110,12 @@ void printNodeData(NodeStruct* _node,
 void printRuleData(RuleStruct* _rule,
                    std::vector<std::string>* massive_of_tokens) {
   if (_rule->_variable.size() == 0) {
-    // printf("%s;\n ", _rule->_rule_uniq_name.c_str());
     global_string_with_graph.append(_rule->_rule_uniq_name.c_str());
     global_string_with_graph.append(";\n");
   }
-  // bool should_print_lable = false;
-  // if (_rule->_variable.size() >1){
-  //	should_print_lable = true;
-  //}
   /*
     for (auto i = _rule->_variable.begin(); i!= _rule->_variable.end(); ++i){
       if ((*i)!=NULL) {
-        //printf("%s -> ", _rule->_rule_uniq_name.c_str());
           global_string_with_graph.append(_rule->_rule_uniq_name.c_str());
           global_string_with_graph.append(" -> ");
         printVariableData((*i));
@@ -150,16 +153,56 @@ void printRuleData(RuleStruct* _rule,
       "} \" style=filled gradientangle=90 "
       "fillcolor=\"cornsilk;0.5:aquamarine\"];\n");
 
+  // This Section represents another realisation of Graph description
   /*
-    for (int i=0; i< _rule->_variable.size(); i++){
-          if (_rule->_variable[i] != NULL){
-                  //global_string_with_graph.append(_rule->_rule_uniq_name.c_str());
-          //global_string_with_graph.append(";\n");
-          //global_string_with_graph.append();
+    global_string_with_graph.append(_rule->_rule_uniq_name.c_str());
+    global_string_with_graph.append(";\n");
 
-        printVariableData(_rule->_variable[i],_rule,i, massive_of_tokens);
+    global_string_with_graph.append(_rule->_rule_uniq_name.c_str());
+    global_string_with_graph.append("[label=<<table><tr><td bgcolor=\"#7FFFD4\"
+    colspan=\"");
+    int temp_count_i = _rule->_variable.size(); // не нужна проверка - дот их
+    игнорирует
+    global_string_with_graph.append(returnIntToString(temp_count_i));
+    global_string_with_graph.append("\">");
+    global_string_with_graph.append(_rule->_name.c_str());
+    global_string_with_graph.append("</td></tr>");
+
+    global_string_with_graph.append("<tr>");
+    for (int i = 0; i < temp_count_i; ++i)
+    {
+          global_string_with_graph.append("<td  bgcolor=\"");
+          if (isItToken(_rule->_variable[i],massive_of_tokens)){
+            global_string_with_graph.append("#7EC0EE");
           }
+          else {
+            global_string_with_graph.append("#FFF68F");
+          }
+          global_string_with_graph.append("\">");
+          std::string temp_str(_rule->_variable[i]->_name);
+          if (temp_str.find("'") != std::string::npos){
+                  temp_str = temp_str.substr(temp_str.find("'")+1);
+                  temp_str = temp_str.substr(0,temp_str.find("'"));
+                  //global_string_with_graph.append("\\");
+                  if (temp_str.compare("<") == 0){
+                          temp_str.assign("&lt");
+                  }
+                  if (temp_str.compare(">") == 0){
+                          temp_str.assign("&gt");
+                  }
+                  if (temp_str.compare("{") == 0 ||
+                          temp_str.compare("}") == 0
+                  ){
+                          global_string_with_graph.append("\\");
+                  }
+          }
+          global_string_with_graph.append(temp_str);
+          global_string_with_graph.append("</td>");
     }
+    if (temp_count_i == 0) {
+          global_string_with_graph.append("<td bgcolor=\"#7FFFD4\"> </td>");
+    }
+    global_string_with_graph.append("</tr></table>>]\n");
   */
 };
 void printVariableData(VariableStruct* _variable, RuleStruct* _rule, int _pos,
@@ -208,7 +251,6 @@ void printAllDataFromNewStruct(std::string file_path,
   // и потом функцию которая нарисует связи в правил и этого бокса
   // CREATE_TOKENS_TABLE;
 
-  // printf("%s\n","}");
   global_string_with_graph.append("}\n");
 
   if (file_path.compare("") == 0) {

@@ -1,11 +1,11 @@
 %{
 	#include <string>
-	#include <vector>
-	#include <stdio.h>
 	#include <fstream>
 	#include <iostream>
-   #define YYSTYPE std::string
+   #include <stdio.h>
+   #define YYSTYPE std::string //char*
    #include "code_parser.tab.h"
+
    void yyerror(char const *s);
    //std::vector<std::string> massive_of_tokens;
    int percent_count = 0; // if we met second double percent - call yyterminate(); 
@@ -50,8 +50,9 @@
 [/][/].*\n      ; // comment
 
 [a-zA-Z_][a-zA-Z0-9_]* { 
-							yylval = yytext;
-							//printf("%s\n","variable" );
+                                                //printf("val = %s\n",yylval.c_str() );
+						yylval = yytext;
+						//printf("%s\n",yytext );
 			                return VARIABLE;
 		                }
 

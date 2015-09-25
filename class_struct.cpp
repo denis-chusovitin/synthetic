@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <stdlib.h>
-#include <class_struct.h>
+#include "class_struct.h"
 
 /// GLOBAL VARIABLES
 int _operators_number = 0;
