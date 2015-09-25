@@ -27,7 +27,7 @@ class Variable : public TokenTypeClass {
  public:
   OperatorTypeClass* def_operator;
   std::string returnName();
-  explicit Variable(std::string assigned_name);
+  Variable(std::string assigned_name);
   //~Variable();
 };
 class Symbol : public TokenTypeClass {
@@ -35,7 +35,7 @@ class Symbol : public TokenTypeClass {
 
  public:
   std::string returnName();
-  explicit Symbol(std::string assigned_name);
+  Symbol(std::string assigned_name);
   //~Symbol();
 };
 class BraceCode : public TokenTypeClass {
@@ -44,7 +44,7 @@ class BraceCode : public TokenTypeClass {
 
  public:
   std::string returnName();
-  explicit BraceCode(std::string assigned_name);
+  BraceCode(std::string assigned_name);
   //~BraceCode();
 };
 
@@ -57,7 +57,7 @@ class Operators : public OperatorTypeClass {
   std::list<OperatorTypeClass*> ops;
   OperatorTypeClass* pointer_to_operator;
   OperatorTypeClass* pointer_to_operators;
-  explicit Operators(std::string node_name);
+  Operators(std::string node_name);
   Operators(OperatorTypeClass* op, std::string node_name);
   Operators(OperatorTypeClass* op1, OperatorTypeClass* op2,
             std::string node_name);
@@ -82,10 +82,10 @@ class DefinitionBlocksClass : public OperatorTypeClass {
   OperatorTypeClass* pointer_to_def_blocks;
   OperatorTypeClass* pointer_to_def_block_with_brace_code;
   // std::string _node_name;
-  explicit DefinitionBlocksClass(std::string node_name);
+  DefinitionBlocksClass(std::string node_name);
   DefinitionBlocksClass(OperatorTypeClass* op, std::string node_name);
-  Defexplicit initionBlocksClass(OperatorTypeClass* op1, OperatorTypeClass* op2,
-                                 std::string node_name);
+  DefinitionBlocksClass(OperatorTypeClass* op1, OperatorTypeClass* op2,
+                        std::string node_name);
 };
 
 class DefinitionBlockWithBraceCode : public OperatorTypeClass {
@@ -109,7 +109,7 @@ class DefinitionBlockClass : public OperatorTypeClass {
   // std::string _node_name;
   OperatorTypeClass* pointer_to_def_block;
   OperatorTypeClass* pointer_to_token;
-  explicit DefinitionBlockClass(std::string node_name);
+  DefinitionBlockClass(std::string node_name);
   DefinitionBlockClass(OperatorTypeClass* op, std::string node_name);
   DefinitionBlockClass(OperatorTypeClass* op1, OperatorTypeClass* op2,
                        std::string node_name);

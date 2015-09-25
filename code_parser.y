@@ -3,6 +3,8 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <string>
+#include <typeinfo>
 
 #include "class_struct.h"
 #include "new_struct_for_program.h"
@@ -11,21 +13,32 @@
 #include "functions_to_create_new_struct.h"
 #include "functions_to_print_data_from_new_struct.h"
 
+#ifdef __cplusplus
+// extern "C" {
+#endif
+
+  //#ifndef yylineno
   extern int yylineno;
+  //#endif
   extern int yylex();
 
   extern void setNewBuffer(const char *buffer_pointer);
 
-  void yyerror(char const *s) {
+  extern void yyerror(char const *s) {
     std::cerr << s << ", line " << yylineno << std::endl;
     return;
   }
+#ifdef __cplusplus
+//}
+#endif
+
   //#define YYSTYPE std::string
 
   std::vector<std::string> massive_of_tokens;
 
   typedef struct {
     std::string str;
+    char *char_type;
     OperatorTypeClass *node_t;
     TokenTypeClass *token_t;  /// Пока не используется но может понадобится
   } YYSTYPE;
@@ -131,8 +144,9 @@ TOKEN {
 };
 
 TOKEN:
-VARIABLE {
-  // printf("Var %s\n", $1.c_str());
+VARIABLE {  // std::string temp_str("");
+  // std::cout << typeid($1).name;
+  // printf("Sym %d\n", $1);
   $$ = new TokenClass(new Variable($1), "TOKEN");
 }
 | SYMBOL {

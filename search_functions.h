@@ -18,10 +18,8 @@ void searchToken(OperatorTypeClass* _token_block);
 
 void searchSameVariables(OperatorTypeClass* start_OP);
 
-void setGlobalOperator(OperatorTypeClass* _oper);
 void createAdditionalConnections();
 
-void createNodesFromMap();
-void generateAdditionalConnectionsInNewStructure();
-NodeStruct* returnEntryNode();
-void printAllDataFromNewStruct(NodeStruct* _node);
+// void createNodesFromMap();
+// void generateAdditionalConnectionsInNewStructure();
+// void printAllDataFromNewStruct();
