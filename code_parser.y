@@ -1,4 +1,4 @@
-% {
+%{
 #include <stdio.h>
 #include <iostream>
 #include <list>
@@ -53,26 +53,28 @@
   std::string output_graph_file("");
   std::string output_program_file("");
 
-  %
-}
+%}
 
-% token VARIABLE % token SYMBOL % token BRACE_CODE_TOKEN
 
-        % token RETURNED_TOKEN
+%token VARIABLE
+%token SYMBOL
+%token BRACE_CODE_TOKEN
 
-        % token DOUBLE_PERCENT % token PERCENT_OPEN_BRACE %
-        token PERCENT_CLOSE_BRACE % token TOKEN_LINE_START
+%token RETURNED_TOKEN
 
-        % error -
-    verbose
+%token DOUBLE_PERCENT 
+%token PERCENT_OPEN_BRACE
+%token PERCENT_CLOSE_BRACE
+%token TOKEN_LINE_START
+ 
+%error-verbose
 
-        % type<str> VARIABLE SYMBOL BRACE_CODE_TOKEN RETURNED_TOKEN %
-        type<node_t> OPS OP DEFINITION_BLOCKS DEFINITION_BLOCK
-            DEFINITION_BLOCK_WITH_END TOKEN
+%type<str>     VARIABLE SYMBOL BRACE_CODE_TOKEN RETURNED_TOKEN
+%type<node_t>  OPS OP DEFINITION_BLOCKS DEFINITION_BLOCK DEFINITION_BLOCK_WITH_END TOKEN
 
-        % %
+%%
 
-        PROGRAM : TOKEN_SECTION_EMPTY_OR_NOT DOUBLE_PERCENT OPS {
+PROGRAM : TOKEN_SECTION_EMPTY_OR_NOT DOUBLE_PERCENT OPS {
   // printHelloFromSo();
   searchOperators($3);
   createAdditionalConnections();
@@ -153,7 +155,7 @@ VARIABLE {  // std::string temp_str("");
   // printf("Sym %s\n", $1.c_str());
   $$ = new TokenClass(new Symbol($1), "TOKEN");
 };
-% %
+%%
 #define OFFSET_FOR_MINUSES 2
 
     bool isArgumentExists(int _argc, char **_argv, std::string _parameter,
