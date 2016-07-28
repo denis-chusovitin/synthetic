@@ -4,6 +4,7 @@
 #include <vector>
 #include <time.h>
 #include <string>
+#include <list>
 #include "class_struct.h"
 #include "new_struct_for_program.h"
 #include "singleton_data_struct.h"
@@ -12,7 +13,6 @@
 
 // Здесь начнем динамически подключать нашу библиотеку
 // чтобы получить функцию sendRequestToDll();
-
 #include <dlfcn.h>
 
 void* ext_library;  // хандлер внешней библиотеки
