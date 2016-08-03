@@ -45,7 +45,7 @@
 
 [{]                 {  yylval = ""; BEGIN(BRACE_CODE); }
 <BRACE_CODE>[^}]+	{;} //<BRACE_CODE>[ \t\r\n]   {;}
-<BRACE_CODE>[}]     {  BEGIN(INITIAL);  return BRACE_CODE_TOKEN; }
+<BRACE_CODE>[}]     {  BEGIN(INITIAL); }
 
 [/][/].*\n      ; // comment
 
