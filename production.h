@@ -1,10 +1,12 @@
+#ifndef PRODUCTION_H_
+#define PRODUCTION_H_
+
 #include <string>
 #include <vector>
 
 using namespace std;
 
-struct Symbol
-{
+struct Symbol {
   string name;
   bool isVariable;
   
@@ -12,11 +14,12 @@ struct Symbol
     name(name), isVariable(isVariable) {}
 };
 
-struct Production
-{
+struct Production {
   Symbol head;
   vector<Symbol> body;
+  
   Production(Symbol head, vector<Symbol> body) : 
     head(head), body(body) {}
 };
 
+#endif

@@ -15,6 +15,7 @@
 #include "functions_to_print_data_from_new_struct.h"
 */
 #include "production.h"
+#include "graph.h"
 
 #ifdef __cplusplus
 // extern "C" {
@@ -85,6 +86,7 @@
 %%
 
 PROGRAM : TOKEN_SECTION_EMPTY_OR_NOT DOUBLE_PERCENT OPS {
+  /*
   vector<Production>::iterator prod; 
   vector<Symbol>::iterator j;  
   
@@ -96,6 +98,8 @@ PROGRAM : TOKEN_SECTION_EMPTY_OR_NOT DOUBLE_PERCENT OPS {
     }
     std::cout << '\n';
   }
+  */
+  Graph g(productions);
    // productions.push_back(Production(Symbol($1, true), *it));
   // printHelloFromSo();
   //searchOperators($3);
