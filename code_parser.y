@@ -14,7 +14,7 @@
 #include "functions_to_create_new_struct.h"
 #include "functions_to_print_data_from_new_struct.h"
 */
-#include "production.h"
+#include "grammar.h"
 #include "graph.h"
 
 #ifdef __cplusplus
@@ -31,6 +31,8 @@
   extern void yyerror(char const *s) {
     std::cerr << s << ", line " << yylineno << std::endl;
     return;
+    
+  extern int percent_count;
   }
 #ifdef __cplusplus
 //}
@@ -43,7 +45,7 @@
   typedef struct {
     std::string str;
     char *char_type;
-    Symbol *symbol;
+    int integer;
   //  OperatorTypeClass *node_t;
   //  TokenTypeClass *token_t;  /// Пока не используется но может понадобится
   } YYSTYPE;
@@ -59,9 +61,10 @@
   std::string output_graph_file("");
   std::string output_program_file("");
   
-  vector<Production> productions;
-  vector<Symbol> prod_body;
-  vector<vector<Symbol>> prod_bodies;
+  vector<int> prod_body;
+  vector<vector<int>> prod_bodies;
+  
+  Grammar g;
 
 %}
 
@@ -78,28 +81,35 @@
  
 %error-verbose
 
-%type<str>  VARIABLE SYMBOL RETURNED_TOKEN 
-%type<symbol> TOKEN
-%type<vector<vector<Symbol>>>  DEFINITION_BLOCKS 
-%type<vector<Symbol>>  DEFINITION_BLOCK 
+%type<str> VARIABLE SYMBOL RETURNED_TOKEN 
 
 %%
 
 PROGRAM : TOKEN_SECTION_EMPTY_OR_NOT DOUBLE_PERCENT OPS {
   /*
-  vector<Production>::iterator prod; 
+  vector<Prod>::iterator prod; 
   vector<Symbol>::iterator j;  
   
   for (prod=productions.begin(); prod!=productions.end(); prod++) {
-    vector<Symbol> body = prod->body;
-    std::cout << prod->head.name << ":\n ";
+    vector<Symbol> body = prod->second;
+    std::cout << prod->first.name << ":\n ";
     for (j=body.begin(); j!=body.end(); j++) {
         std::cout << j->name << ' ';
     }
     std::cout << '\n';
   }
   */
-  Graph g(productions);
+  /*
+  for (auto it = g.productions.begin(); it!=g.productions.end(); it++) {
+    std::cout << g.symbols[it->head].name << ":\n ";
+    auto body = it->body;
+    for (auto i = body.begin(); i != body.end(); i++) {
+      std::cout << g.symbols[*i].name << ' ';
+    }
+    std::cout << '\n';
+  }
+  */
+  //Graph g(productions);
    // productions.push_back(Production(Symbol($1, true), *it));
   // printHelloFromSo();
   //searchOperators($3);
@@ -135,11 +145,8 @@ OP {
 | OPS OP { };
 
 OP:
-VARIABLE ':' DEFINITION_BLOCKS ';' {
-  vector<vector<Symbol>>::iterator it;  
-	for (it=prod_bodies.begin(); it!=prod_bodies.end(); it++) {
-    productions.push_back(Production(Symbol($1, true), *it));
-  }
+VARIABLE ':' DEFINITION_BLOCKS ';' { 
+	g.addProductions($1, prod_bodies);
   prod_bodies.clear();
 };
 
@@ -158,28 +165,17 @@ DEFINITION_BLOCKS '|' DEFINITION_BLOCK {
   prod_body.clear();
 };
 
-DEFINITION_BLOCK:
-TOKEN {
-  //vector<Symbol> prodBody { $1 };
-  //printf("Sym %s\n", $1.c_str());
-} 
-| DEFINITION_BLOCK TOKEN {
- // $1.push_back($2);
- // $$ = $1;
-};
+DEFINITION_BLOCK: 
+TOKEN 
+| DEFINITION_BLOCK TOKEN
+;
 
 TOKEN:
-VARIABLE {  // std::string temp_str("");
-  //std::cout << typeid($1).name;
-  //printf("Sym %s\n", $1.c_str());
-  //printf("Sym %d\n", $1);
- // $$ = new Symbol($1, true);
-  prod_body.push_back(Symbol($1, true));
+VARIABLE { 
+  prod_body.push_back(g.findWithAdd($1, true));
 }
 | SYMBOL {
-  //printf("Sym %s\n", $1.c_str());
- // $$ = new Symbol($1, false);
-  prod_body.push_back(Symbol($1, false));
+  prod_body.push_back(g.findWithAdd($1, false));
 };
 %%
 #define OFFSET_FOR_MINUSES 2
