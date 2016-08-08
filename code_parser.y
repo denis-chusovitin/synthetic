@@ -109,7 +109,7 @@ PROGRAM : TOKEN_SECTION_EMPTY_OR_NOT DOUBLE_PERCENT OPS {
     std::cout << '\n';
   }
   */
-  //Graph g(productions);
+  Graph graph(g);
    // productions.push_back(Production(Symbol($1, true), *it));
   // printHelloFromSo();
   //searchOperators($3);

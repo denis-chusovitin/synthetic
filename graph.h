@@ -1,6 +1,6 @@
 #include <vector>
 #include <map>
-#include "production.h"
+#include "grammar.h"
 
 using namespace std;
 
@@ -8,10 +8,10 @@ class Graph {
   private:
     int size;
     bool **adj_matrix;
-   // map<Production*, int, ProductionCompare> index_map;
     
-    void get_element(Production* p1, Production* p2);
+    void transitive_closure();
   public:
-    Graph(vector<Production> &productions);
+    Graph(int n);
+    Graph(Grammar &g);
     ~Graph();
 };

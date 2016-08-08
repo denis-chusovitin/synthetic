@@ -28,10 +28,10 @@ struct Production {
 class Grammar {
   private:
     int start;
-    vector<Production> productions;
-    vector<Symbol> symbols;
 
   public:
+    vector<Production> productions;
+    vector<Symbol> symbols;
     int findWithAdd(string name, bool is_variable);
     void addProductions(string head_name, vector<vector<int>> productions);
 };

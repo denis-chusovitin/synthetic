@@ -16,7 +16,7 @@ void Grammar::addProductions(string head_name, vector<vector<int>> prods) {
   
   for (auto it = prods.begin(); it != prods.end(); it++) {
     productions.push_back(Production(idx, *it));
-    symbols[idx].productions.push_back(idx);
+    symbols[idx].productions.push_back(productions.size() - 1);
   } 
 }
 
